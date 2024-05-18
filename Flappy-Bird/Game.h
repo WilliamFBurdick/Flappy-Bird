@@ -42,15 +42,51 @@ struct Entity
 class Game
 {
 public:
+	enum FontType
+	{
+		FLAPPY, SMALL, MEDIUM, HUGE
+	};
+	enum SoundEffect
+	{
+		JUMP, HURT, EXPLOSION, SCORE
+	};
 	Game();
 	~Game();
 	void Run();
+	std::vector<Pipe*>& GetPipes() { return pipes; }
+	const Uint8* GetKeyboard() { return mKeyboard; }
+
+	void SetBird(Bird* bird) { this->bird = bird; }
+	Bird* GetBird() { return bird; }
+
+	void SetPipeTex(SDL_Texture* tex) { pipeTex = tex; }
+	SDL_Texture* GetPipeTex() { return pipeTex; }
+	SDL_Texture* LoadImage(const char* path);
+
+	int GetLastY() { return lastY; }
+	void SetLastY(int newY) { lastY = newY; }
+
+	int GetPipeHeight() { return pipeHeight; }
+	void SetPipeHeight(int newHeight) { pipeHeight = newHeight; }
+
+	bool GetScrolling() { return scrolling; }
+	void SetScrolling(bool value) { scrolling = value; }
+
+	float GetPipeSpawnTimer() { return pipeSpawnTimer; }
+	void SetPipeSpawnTimer(float value) { pipeSpawnTimer = value; }
+
+	void EndGame(int score);
+	void StartGame();
+	void StartCountdown();
+	void ReturnToMenu();
+
+	void WriteText(FontType font, const char* text, float x, float y, bool centerAlign, SDL_Color color = { 0xFF, 0xFF, 0xFF, 0xFF });
+	void PlaySound(SoundEffect effect);
 private:
 	void Input();
 	void Update(float deltaTime);
 	void Render();
 
-	SDL_Texture* LoadImage(const char* path);
 private:
 	SDL_Renderer* mRenderer;
 	SDL_Window* mWindow;
@@ -68,9 +104,21 @@ private:
 	TTF_Font* mFlappyFont;
 	TTF_Font* mHugeFont;
 
-	Bird bird;
+	Mix_Chunk* mJumpSound;
+	Mix_Chunk* mHurtSound;
+	Mix_Chunk* mExplosionSound;
+	Mix_Chunk* mScoreSound;
+	Mix_Music* mMusic;
+
+	Bird* bird;
 	SDL_Texture* pipeTex;
 	std::vector<Pipe*> pipes;
 	float pipeSpawnTimer;
+
+	class StateMachine* mStateMachine;
+
+	int lastY;
+	int pipeHeight;
+	bool scrolling;
 };
 

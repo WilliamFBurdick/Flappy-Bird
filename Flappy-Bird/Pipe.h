@@ -22,10 +22,14 @@ public:
 
 	SDL_Rect GetTopRect() { return mTopRect; }
 	SDL_Rect GetBottomRect() { return mBottomRect; }
+
+	bool GetScored() { return scored; }
+	void SetScored(bool value) { scored = value; }
 private:
 	bool remove;
 	float x, y;
 	SDL_Rect mTopRect, mBottomRect;
 	SDL_Texture* mTexture;
+	bool scored;
 };
 
