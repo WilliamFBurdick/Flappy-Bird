@@ -37,6 +37,7 @@ void PlayState::Update(float deltaTime)
 			mGame->GetBird()->GetRect().y > VIRTUAL_HEIGHT - mGame->GetBird()->GetRect().h)
 		{
 			mGame->PlaySound(Game::SoundEffect::HURT);
+			mGame->PlaySound(Game::SoundEffect::EXPLOSION);
 			mGame->SetScrolling(false);
 			mGame->EndGame(score);
 			return;
